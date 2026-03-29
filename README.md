@@ -41,6 +41,12 @@ make setup
 
 This will create `.env` from `.env.example`, build and start the Docker containers, and run migrations. The app will be available at `http://localhost:8001`.
 
+Then install the pre-commit hooks so ruff runs automatically on every commit:
+
+```bash
+pre-commit install
+```
+
 Run `make help` to see all available commands.
 
 ## Settings

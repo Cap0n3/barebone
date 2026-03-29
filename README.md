@@ -68,3 +68,7 @@ Configured in `.env`:
 | `COMPOSE_PROJECT_NAME` | `barebone` | Docker container name prefix |
 | `DB_PORT` | `5432` | Host port for PostgreSQL |
 | `WEB_PORT` | `8001` | Host port for Django |
+
+## Coding Style
+
+This project follows the [HackSoft Django Styleguide](https://github.com/HackSoftware/Django-Styleguide).

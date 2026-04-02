@@ -1,4 +1,4 @@
-PROJECT_NAME = ./backend
+PROJECT_NAME = ./core
 
 .PHONY: setup secret run app create-superuser shell docker-bash logs mkmigs mkmigs-dry migrate migrate-all showmigrations db-backup db-restore db-table db-columns flush sqlflush psql collect test ruff djlint djlint-all help
 
@@ -37,18 +37,18 @@ app:
 		echo "Usage: make app app=<app_name>"; \
 		exit 1; \
 	fi
-	@docker compose exec web mkdir -p /app/backend/backend/$(app)
-	@docker compose exec web python backend/manage.py startapp $(app) backend/backend/$(app)
+	@docker compose exec web mkdir -p /app/$(PROJECT_NAME)/$(PROJECT_NAME)/apps/$(app)
+	@docker compose exec web python $(PROJECT_NAME)/manage.py startapp $(app) $(PROJECT_NAME)/$(PROJECT_NAME)/apps/$(app)
 	@echo "Done."
 
 create-superuser:
 	@echo "Creating superuser..."
-	@docker compose exec web python backend/manage.py createsuperuser
+	@docker compose exec web python $(PROJECT_NAME)/manage.py createsuperuser
 	@echo "Done."
 
 shell:
 	@echo "Running shell..."
-	@docker compose exec web python backend/manage.py shell
+	@docker compose exec web python $(PROJECT_NAME)/manage.py shell
 	@echo "Done."
 
 docker-bash:
@@ -60,46 +60,46 @@ logs:
 
 mkmigs:
 	@echo "Making migrations..."
-	@docker compose exec web python backend/manage.py makemigrations $(app)
+	@docker compose exec web python $(PROJECT_NAME)/manage.py makemigrations $(app)
 	@echo "Done."
 
 mkmigs-dry:
 	@echo "Making migrations (dry run)..."
-	@docker compose exec web python backend/manage.py makemigrations --dry-run
+	@docker compose exec web python $(PROJECT_NAME)/manage.py makemigrations --dry-run
 	@echo "Done."
 
 migrate:
 	@echo "Migrating..."
-	@docker compose exec web python backend/manage.py migrate
+	@docker compose exec web python $(PROJECT_NAME)/manage.py migrate
 	@echo "Done."
 
 migrate-all:
 	@echo "Making migrations locally, then migrating in container..."
 	@cd $(PROJECT_NAME) && python manage.py makemigrations
-	@docker compose exec web python backend/manage.py migrate
+	@docker compose exec web python $(PROJECT_NAME)/manage.py migrate
 	@echo "Done."
 
 showmigrations:
 	@echo "Showing migrations..."
-	@docker compose exec web python backend/manage.py showmigrations $(app)
+	@docker compose exec web python $(PROJECT_NAME)/manage.py showmigrations $(app)
 	@echo "Done."
 
 # DATABASE COMMANDS
 # ------------------------------------------------------------------------------
 db-backup:
 	@echo "Creating a backup of database..."
-	@docker compose exec web bash -c "cd /app/backend/utility/db_operations && DOCKER_BACKUP_DIR=/app/db_backups ./db_backup.sh"
+	@docker compose exec web bash -c "cd /app/$(PROJECT_NAME)/utility/db_operations && DOCKER_BACKUP_DIR=/app/db_backups ./db_backup.sh"
 	@echo "Done."
 
 db-restore:
 	@echo "Restoring database..."
-	@docker compose exec web bash -c "cd /app/backend/utility/db_operations && DOCKER_BACKUP_DIR=/app/db_backups ./db_restore.sh"
+	@docker compose exec web bash -c "cd /app/$(PROJECT_NAME)/utility/db_operations && DOCKER_BACKUP_DIR=/app/db_backups ./db_restore.sh"
 	@echo "Done."
 
 db-table:
 	@echo "Searching table..."
 	@docker compose exec web bash -c \
-	"echo \"SELECT $(columns) FROM $(table) $(WHERE);\" | python backend/manage.py dbshell"
+	"echo \"SELECT $(columns) FROM $(table) $(WHERE);\" | python $(PROJECT_NAME)/manage.py dbshell"
 
 db-columns:
 	@echo "Listing columns for table: $(table)"
@@ -109,16 +109,16 @@ SELECT column_name \
 FROM information_schema.columns \
 WHERE table_name = '$(table)' \
 ORDER BY ordinal_position;\" \
-| python backend/manage.py dbshell"
+| python $(PROJECT_NAME)/manage.py dbshell"
 
 sqlflush:
 	@echo "Showing SQL to flush the database..."
-	@docker compose exec web python backend/manage.py sqlflush
+	@docker compose exec web python $(PROJECT_NAME)/manage.py sqlflush
 	@echo "Done."
 
 flush:
 	@echo "Flushing the database (deleting all data)..."
-	@docker compose exec web python backend/manage.py flush
+	@docker compose exec web python $(PROJECT_NAME)/manage.py flush
 	@echo "Done."
 
 psql:
@@ -130,14 +130,14 @@ psql:
 # ------------------------------------------------------------------------------
 collect:
 	@echo "Collecting static files..."
-	@docker compose exec web python backend/manage.py collectstatic
+	@docker compose exec web python $(PROJECT_NAME)/manage.py collectstatic
 	@echo "Done."
 
 # TEST COMMANDS
 # ------------------------------------------------------------------------------
 test:
 	@echo "Running tests..."
-	@docker compose exec web pytest backend/
+	@docker compose exec web pytest $(PROJECT_NAME)/
 	@echo "Done."
 
 # CODE QUALITY

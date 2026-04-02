@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
-COPY backend/requirements/base.txt /tmp/requirements/base.txt
-COPY backend/requirements/local.txt /tmp/requirements/local.txt
+COPY core/requirements/base.txt /tmp/requirements/base.txt
+COPY core/requirements/local.txt /tmp/requirements/local.txt
 RUN pip install --no-cache-dir -r /tmp/requirements/local.txt
 
 COPY . /app

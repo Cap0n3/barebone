@@ -15,7 +15,7 @@ A minimal Django project template with Docker, PostgreSQL, pytest, and django-al
 ├── docker-compose.yml
 ├── Dockerfile.web.local
 ├── .env
-├── backend/
+├── core/
 │   ├── manage.py
 │   ├── pyproject.toml
 │   ├── config/
@@ -30,7 +30,7 @@ A minimal Django project template with Docker, PostgreSQL, pytest, and django-al
 │   ├── requirements/
 │   │   ├── base.txt
 │   │   └── local.txt
-│   └── backend/
+│   └── core/
 ```
 
 ## Quick Start

@@ -31,6 +31,7 @@ A minimal Django project template with Docker, PostgreSQL, pytest, and django-al
 │   │   ├── base.txt
 │   │   └── local.txt
 │   └── core/
+│       └── apps/
 ```
 
 ## Quick Start
